@@ -1,0 +1,111 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+            "StorageAccountName": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 24,
+            "metadata": {
+                "Description": "The field can contain only lowercase letters and numbers. Name must be between 3 and 24 characters."
+            }
+        },
+
+        "AppServicePlanName": {
+            "type": "string",
+            "maxLength": 40,
+            "metadata": {
+                "Description": "The name can contain only letters, numbers, and hyphens. The name must start with a letter, and it must end with a letter or a number. The account name length must be from 1 to 40 characters."
+            }
+        },
+        "AppServiceName": {
+            "type": "string",
+            "metadata": {
+                "Description": "The name can contain only letters, numbers, and hyphens. The name must start with a letter, and it must end with a letter or a number. The account name length must be from 2 to 60 characters."
+            },
+            "maxLength": 60
+        }
+    },
+    "resources": [
+        {
+            "name": "[parameters('StorageAccountName')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2018-07-01",
+            "dependsOn": [],
+            "sku": {
+                "name": "Standard_ZRS",
+                "tier": "Standard"
+            },
+            "kind": "StorageV2",
+            "properties": {
+                "accountType": "Standard_ZRS",
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [],
+                    "ipRules": [],
+                    "defaultAction": "Allow"
+                },
+                "supportsHttpsTrafficOnly": true,
+                "encryption": {
+                    "services": {
+                        "file": {
+                            "enabled": true
+                        },
+                        "blob": {
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                },
+                "accessTier": "Hot"
+            }
+        },
+        {
+            "name": "[parameters('AppServicePlanName')]",
+            "type": "Microsoft.Web/serverfarms",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2014-06-01",
+            "dependsOn": [],
+            "tags": {},
+            "properties": {
+                "name": "[parameters('AppServicePlanName')]",
+                "sku": "Standard",
+                "workerSize": 0,
+                "numberOfWorkers": 1
+            }
+        },
+        {
+            "name": "[parameters('AppServiceName')]",
+            "type": "Microsoft.Web/sites",
+            "location": "[resourceGroup().location]",
+            "apiVersion": "2015-08-01",
+            "dependsOn": [
+                "[concat('Microsoft.Web/serverfarms/', parameters('AppServicePlanName'))]"
+            ],
+            "tags": {
+                "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('AppServicePlanName'))]": "Resource",
+                "displayName": "M365 Supporter Frontend"
+            },
+            "properties": {
+                "name": "[parameters('AppServiceName')]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('AppServicePlanName'))]",
+                "siteConfig": {
+                    "appSettings": [
+                        {
+                            "name": "WEBSITE_RUN_FROM_PACKAGE",
+                            "value": "[variables('zipFrontendUrl')]"
+                        },
+                        {
+                            "name": "AppConfig:AzureConfig:StorageConfig:Connection",
+                            "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',parameters('StorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value, ';EndpointSuffix=core.windows.net')]"
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "variables": {
+        "zipFrontendUrl": "https://github.com/glueckkanja/gk-m365-workplacecloudstorage/raw/master/dist/m365wcs.zip"
+    }
+}

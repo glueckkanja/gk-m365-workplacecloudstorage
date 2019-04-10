@@ -1,0 +1,64 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#",
+    "handler": "Microsoft.Compute.MultiVm",
+    "version": "0.1.2-preview",
+    "parameters": {
+        "basics": [
+        ],
+        "steps": [
+            {
+                "name": "Resources",
+                "label": "Azure Resources to deploy",
+                "subLabel": {
+                    "preValidation": "Define the names for the resources",
+                    "postValidation": "Done"
+                },
+                "bladeTitle": "Azure Resources to deploy",
+                "bladeSubtitle": "The resources will bedeployed according to the names you are defining here",
+                "elements": [
+                    {
+                        "name": "StorageAccount",
+                        "label": "Name for Storage Account",
+                        "type": "Microsoft.Common.TextBox",
+                        "toolTip": "This is the name of the storage account. Please mind that only numbers and small capital letters are allowed",
+                        "defaultValue": "m365wcs",
+                        "constraints": {
+                            "required": true,
+                            "regex": "^[a-z0-9]{3,24}$" ,
+                            "validationMessage": "The field can contain only lowercase letters and numbers. Name must be between 3 and 24 characters." 
+                        }
+                    },
+                    {
+                        "name": "AppServicePlan",
+                        "label": "Name for App Service Plan",
+                        "type": "Microsoft.Common.TextBox",
+                        "toolTip": "",
+                        "defaultValue": "m365wcs-sp",
+                        "constraints": {
+                            "required": true,
+                            "regex": "^[a-z0-9A-Z-]{1,40}$",
+                            "validationMessage": "The name can contain only letters, numbers, and hyphens. The name must start with a letter, and it must end with a letter or a number. The account name length must be from 1 to 40 characters."
+                        
+                        }
+                    },
+                    {
+                        "name": "AppService",
+                        "label": "Name of the Website",
+                        "type": "Microsoft.Common.TextBox",
+                        "toolTip": "Please ensure that the name of the app service is globally unique",
+                        "constraints": {
+                            "required": true,
+                            "regex": "^[a-z0-9A-Z-]{2,60}$",
+                            "validationMessage": "The name can contain only letters, numbers, and hyphens. The name must start with a letter, and it must end with a letter or a number. The account name length must be from 2 to 60 characters."
+                        }
+                    }
+                ]
+            }
+        ],
+        "outputs": {
+            "StorageAccountName": "[steps('Resources').StorageAccount]",
+            "AppServicePlanName": "[steps('Resources').AppServicePlan]",
+            "AppServiceName": "[steps('Resources').AppService]"
+        }
+    }
+}
