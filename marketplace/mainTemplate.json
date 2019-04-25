@@ -98,7 +98,7 @@
             ],
             "tags": {
                 "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('AppServicePlanName'))]": "Resource",
-                "displayName": "M365 Supporter Frontend"
+                "displayName": "M365 Workplace Cloud Storage"
             },
             "properties": {
                 "name": "[parameters('AppServiceName')]",
