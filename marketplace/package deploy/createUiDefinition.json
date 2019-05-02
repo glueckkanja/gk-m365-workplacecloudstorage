@@ -1,0 +1,49 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#",
+    "handler": "Microsoft.Compute.MultiVm",
+    "version": "0.1.2-preview",
+    "parameters": {
+        "basics": [],
+        "steps": [
+            {
+                "name": "Resources",
+                "label": "Azure Resources to deploy",
+                "subLabel": {
+                    "preValidation": "Define the names for the resources",
+                    "postValidation": "Done"
+                },
+                "bladeTitle": "Azure Resources to deploy",
+                "bladeSubtitle": "The resources will bedeployed according to the names you are defining here",
+                "elements": [
+                    {
+                        "name": "StorageAccount",
+                        "type": "Microsoft.Storage.StorageAccountSelector",
+                        "label": "Storage Account",
+                        "toolTip": "",
+                        "defaultValue": {
+                            "name": "storageaccount01",
+                            "type": "Standard_LRS"
+                        },
+                        "constraints": {
+                            "allowedTypes": [
+                                "Premium_LRS",
+                                "Premium_GRS",
+                                "Standard_LRS",
+                                "Standard_GRS"
+                            ]
+                        },
+                        "options": {
+                            "hideExisting": true
+                        },
+                        "visible": true
+                    }
+                ]
+            }
+        ],
+        "outputs": {
+            "StorageAccountName": "[steps('Resources').StorageAccount.name]",
+            "StorageAccountType": "[steps('Resources').StorageAccount.type]",
+            "location": "[location()]"
+        }
+    }
+}
