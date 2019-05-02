@@ -2,44 +2,32 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-            "StorageAccountName": {
+        "StorageAccountName": {
             "type": "string",
             "minLength": 3,
             "maxLength": 24,
             "metadata": {
                 "Description": "The field can contain only lowercase letters and numbers. Name must be between 3 and 24 characters."
             }
-        },
-
-        "AppServicePlanName": {
-            "type": "string",
-            "maxLength": 40,
-            "metadata": {
-                "Description": "The name can contain only letters, numbers, and hyphens. The name must start with a letter, and it must end with a letter or a number. The account name length must be from 1 to 40 characters."
-            }
-        },
-        "AppServiceName": {
-            "type": "string",
-            "metadata": {
-                "Description": "The name can contain only letters, numbers, and hyphens. The name must start with a letter, and it must end with a letter or a number. The account name length must be from 2 to 60 characters."
-            },
-            "maxLength": 60
         }
+    },
+    "variables": {
+        "zipFrontendUrl": "https://github.com/glueckkanja/gk-m365-workplacecloudstorage/raw/master/dist/m365wcs.zip",
+        "AppServicePlanName": "[concat('m365wcs-sp',uniquestring(resourceGroup().id))]",
+        "AppServiceName": "[concat('m365wcs-app',uniquestring(resourceGroup().id))]"
     },
     "resources": [
         {
-            "name": "[parameters('StorageAccountName')]",
             "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-04-01",
+            "name": "[parameters('StorageAccountName')]",
             "location": "[resourceGroup().location]",
-            "apiVersion": "2018-07-01",
-            "dependsOn": [],
             "sku": {
-                "name": "Standard_ZRS",
-                "tier": "Standard"
+                "name": "Standard_LRS"
             },
             "kind": "StorageV2",
             "properties": {
-                "accountType": "Standard_ZRS",
+                "accountType": "Standard_LRS",
                 "networkAcls": {
                     "bypass": "AzureServices",
                     "virtualNetworkRules": [],
@@ -62,34 +50,35 @@
             }
         },
         {
-            "name": "[parameters('AppServicePlanName')]",
             "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2018-02-01",
+            "name": "[variables('AppServicePlanName')]",
             "location": "[resourceGroup().location]",
-            "apiVersion": "2014-06-01",
-            "dependsOn": [],
-            "tags": {},
+            "sku": {
+                "Tier": "Standard",
+                "Name": "S1"
+            },
             "properties": {
-                "name": "[parameters('AppServicePlanName')]",
-                "sku": "Standard",
-                "workerSize": 0,
+                "name": "[variables('AppServicePlanName')]",
+                "workerSize": 1,
                 "numberOfWorkers": 1
             }
         },
         {
-            "name": "[parameters('AppServiceName')]",
             "type": "Microsoft.Web/sites",
+            "apiVersion": "2018-02-01",
+            "name": "[variables('AppServiceName')]",
             "location": "[resourceGroup().location]",
-            "apiVersion": "2015-08-01",
             "dependsOn": [
-                "[concat('Microsoft.Web/serverfarms/', parameters('AppServicePlanName'))]"
+                "[concat('Microsoft.Web/serverfarms/', variables('AppServicePlanName'))]"
             ],
             "tags": {
-                "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('AppServicePlanName'))]": "Resource",
-                "displayName": "M365 Supporter Frontend"
+                "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', variables('AppServicePlanName'))]": "Resource",
+                "displayName": "M365 Workplace Cloud Storage"
             },
             "properties": {
-                "name": "[parameters('AppServiceName')]",
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('AppServicePlanName'))]",
+                "name": "[variables('AppServiceName')]",
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', variables('AppServicePlanName'))]",
                 "siteConfig": {
                     "appSettings": [
                         {
@@ -98,14 +87,11 @@
                         },
                         {
                             "name": "AppConfig:AzureConfig:StorageConfig:Connection",
-                            "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',parameters('StorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value, ';EndpointSuffix=core.windows.net')]"
+                            "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',parameters('StorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName')), '2019-04-01').keys[0].value, ';EndpointSuffix=core.windows.net')]"
                         }
                     ]
                 }
             }
         }
-    ],
-    "variables": {
-        "zipFrontendUrl": "https://github.com/glueckkanja/gk-m365-workplacecloudstorage/raw/master/dist/m365wcs.zip"
-    }
+    ]
 }
