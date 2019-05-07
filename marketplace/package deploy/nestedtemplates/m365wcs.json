@@ -1,0 +1,109 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "StorageAccountName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the storage account"
+      }
+    },
+    "StorageAccountType": {
+      "type": "string",
+      "metadata": {
+        "description": "Type of the storage account"
+      }
+    },
+    "artifactsLocation": {
+      "type": "string"
+    },
+    "AppServicePlanName": {
+      "type": "string"
+    },
+    "AppServiceName": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string",
+      "metadata": {
+        "description": "Location where the resources will be deployed"
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2019-04-01",
+      "name": "[parameters('StorageAccountName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "[parameters('StorageAccountType')]"
+      },
+      "kind": "StorageV2",
+      "properties": {
+        "accountType": "[parameters('StorageAccountType')]",
+        "networkAcls": {
+          "bypass": "AzureServices",
+          "defaultAction": "Allow"
+        },
+        "supportsHttpsTrafficOnly": true,
+        "encryption": {
+          "services": {
+            "file": {
+              "enabled": true
+            },
+            "blob": {
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        },
+        "accessTier": "Hot"
+      }
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2018-02-01",
+      "name": "[parameters('AppServicePlanName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "Tier": "Standard",
+        "Name": "S1"
+      },
+      "properties": {
+        "name": "[parameters('AppServicePlanName')]",
+        "workerSize": 1,
+        "numberOfWorkers": 1
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2018-02-01",
+      "name": "[parameters('AppServiceName')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[concat('Microsoft.Web/serverfarms/', parameters('AppServicePlanName'))]"
+      ],
+      "tags": {
+        "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('AppServicePlanName'))]": "Resource",
+        "displayName": "M365 Workplace Cloud Storage"
+      },
+      "properties": {
+        "name": "[parameters('AppServiceName')]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms/', parameters('AppServicePlanName'))]",
+        "siteConfig": {
+          "appSettings": [
+            {
+              "name": "WEBSITE_RUN_FROM_PACKAGE",
+              "value": "[parameters('artifactsLocation')]"
+            },
+            {
+              "name": "AppConfig:AzureConfig:StorageConfig:Connection",
+              "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',parameters('StorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName')), '2019-04-01').keys[0].value)]"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
