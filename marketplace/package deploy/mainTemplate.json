@@ -30,8 +30,9 @@
   },
   "variables": {
     "nestedTemplateUri": "[uri(deployment().properties.templatelink.uri,'nestedtemplates/m365wcs.json')]",
-    "AppServicePlanName": "[concat('m365wcs-sp',uniquestring(resourceGroup().id))]",
-    "AppServiceName": "[concat('m365wcs-app',uniquestring(resourceGroup().id))]"
+    "uniqueString": "[substring(uniquestring(resourceGroup().id),1,6)]",
+    "AppServicePlanName": "[concat('m365wcs-sp',variables('uniqueString'))]",
+    "AppServiceName": "[concat('m365wcs-',variables('uniqueString'))]"
   },
   "resources": [
     {
