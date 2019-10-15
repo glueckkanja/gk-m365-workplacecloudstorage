@@ -100,6 +100,18 @@
             {
               "name": "AppConfig:AzureConfig:StorageConfig:Connection",
               "value": "[Concat('DefaultEndpointsProtocol=https;AccountName=',parameters('StorageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('StorageAccountName')), '2019-04-01').keys[0].value)]"
+            },
+            {
+                "name": "AppConfig:EnterpriseModeSiteListEnabled",
+                "value": "true"                        
+            },
+                                    {
+                "name": "AppConfig:NonSensitiveFilesEnabled",
+                "value": "true"                        
+            },
+            {
+                "name": "AppConfig:FavoriteListsEnabled",
+                "value": "true"                        
             }
           ]
         }
