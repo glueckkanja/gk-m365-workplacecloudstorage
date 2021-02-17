@@ -1,6 +1,10 @@
 # M365 Workplace Cloud Storage Spec
 ## Abstract
-Microsoft cloud managed Modern Workplace devices get all relevant policies and configurations from Microsoft Intune. Some of these settings rely on files available by URL. This application is intended to manage these files with an easy to use web based approach where administrators can create and edit the files and separate the content based on groups.
+Microsoft cloud managed Modern Workplace devices get all relevant policies and configurations via Microsoft Intune. Some of these settings rely on files available by URL. This application is intended to manage these files with an easy to use web based interface where administrators can create, upload and edit files and separate the content based on groups. Currently supported are the following types:
+
+- Enterprise Mode Site List (XML)
+- Favorites (HTML and JSON for Microsoft Edge ADMX)
+- Backgrounds and other files
 
 ## Deployment
 
@@ -39,3 +43,18 @@ Microsoft cloud managed Modern Workplace devices get all relevant policies and c
 2. Click **Add user**
 3. You can grant access to the application to specific user or groups
 ![](https://github.com/glueckkanja/gk-m365-workplacecloudstorage/raw/master/docs/images/6.png)
+
+## Updates and Application Artifacts
+To get continuous updates for M365 Workplace Cloud Storage you can point a configuration variable to the maintained GitHub repository. During every restart, the Azure Web App will do a check and update its sources if necessary.
+
+1. Go to Azure
+2. Choose the corresponding App Service
+3. Click on "Configuration" (under "Settings")
+3. Change the value of "WEBSITE_RUN_FROM_PACKAGE" to one of the following:
+
+- Release channel:
+  `https://github.com/glueckkanja/gk-m365-workplacecloudstorage/raw/master/dist/m365wcs.zip`
+- Beta channel:
+  `https://github.com/glueckkanja/gk-m365-workplacecloudstorage/raw/master/dist/m365wcs-beta.zip`
+
+5. In future, just perform a restart of the App Service to get the updated artifacts.
