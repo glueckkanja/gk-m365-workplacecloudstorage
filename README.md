@@ -16,19 +16,19 @@ Microsoft cloud managed Modern Workplace devices get all relevant policies and c
 ### Configure with express settings
 1. Open [Azure Portal](https://www.portal.azure.com) and navigate to the deployed **M365 Workplace Cloud Storage** app service. 
 2. Select **Authentication / Authorization** under **Settings** and enable **App Service Authentication**.
-![](https://github.com/glueckkanja/gk-m365-workplacecloudstorage/raw/master/docs/images/1.png =300x)
+![](https://github.com/glueckkanja/gk-m365-workplacecloudstorage/raw/master/docs/images/1.png)
 3. Set **Action to take when request is not authenticated** to **Log in with Azure Active Directory**.
 ![](https://github.com/glueckkanja/gk-m365-workplacecloudstorage/raw/master/docs/images/2.png)
 4. Configure **Azure Active Directory** as the **Authentication Provider**
     - Set **Management mode** to **Express**.
     - Create a new AD App or select an existing if you have already registered an AD App for **M365 Workplace Cloud Storage**
-![](https://github.com/glueckkanja/gk-m365-workplacecloudstorage/raw/master/docs/images/3.png =300x)
+![](https://github.com/glueckkanja/gk-m365-workplacecloudstorage/raw/master/docs/images/3.png)
 5. Save the changes
 6. Navigate to **Overview** and click the URL of **M365 Workplace Cloud Storage**
 7. If Service is not starting or Authentication fails wait a few moments
 8. Accept requested permissions
 9. Check **Consent on behalf of your organization** if you want to accept the requested permissions for all users within your organization
-![](https://github.com/glueckkanja/gk-m365-workplacecloudstorage/raw/master/docs/images/4.png =300x)
+![](https://github.com/glueckkanja/gk-m365-workplacecloudstorage/raw/master/docs/images/4.png)
 
 ### Configure with advanced settings
 As an alternative to the Management mode "Express" you can also use "Advanced":
