@@ -32,7 +32,7 @@ Microsoft cloud managed Modern Workplace devices get all relevant policies and c
 
 ### Configure with advanced settings
 As an alternative to the Management mode "Express" you can also use "Advanced":
-Please follow the guide provided by Microsoft in their (docs)[https://docs.microsoft.com/en-us/azure/app-service/configure-authentication-provider-aad#advanced]
+Please follow the guide provided by Microsoft in their [docs](https://docs.microsoft.com/en-us/azure/app-service/configure-authentication-provider-aad#advanced)
 
 ## Authorize users or groups
 ### Enable authorization for M365 Workplace Cloud Storage
