@@ -15,20 +15,30 @@ Microsoft cloud managed Modern Workplace devices get all relevant policies and c
 ## Enabling Azure AD authentication
 ### Configure with express settings
 1. Open [Azure Portal](https://www.portal.azure.com) and navigate to the deployed **M365 Workplace Cloud Storage** app service. 
-2. Select **Authentication / Authorization** under **Settings** and enable **App Service Authentication**.
-![](https://github.com/glueckkanja/gk-m365-workplacecloudstorage/raw/master/docs/images/1.png)
-3. Set **Action to take when request is not authenticated** to **Log in with Azure Active Directory**.
-![](https://github.com/glueckkanja/gk-m365-workplacecloudstorage/raw/master/docs/images/2.png)
-4. Configure **Azure Active Directory** as the **Authentication Provider**
-    - Set **Management mode** to **Express**.
-    - Create a new AD App or select an existing if you have already registered an AD App for **M365 Workplace Cloud Storage**
-![](https://github.com/glueckkanja/gk-m365-workplacecloudstorage/raw/master/docs/images/3.png)
-5. Save the changes
-6. Navigate to **Overview** and click the URL of **M365 Workplace Cloud Storage**
-7. If Service is not starting or Authentication fails wait a few moments
-8. Accept requested permissions
-9. Check **Consent on behalf of your organization** if you want to accept the requested permissions for all users within your organization
-![](https://github.com/glueckkanja/gk-m365-workplacecloudstorage/raw/master/docs/images/4.png)
+2. Select **Authentication** under **Settings**
+
+![image](https://user-images.githubusercontent.com/24998910/130623610-10fd623a-a7b8-4fd0-a75e-ec880efefeae.png)
+
+3. Click on **Add Identity Provider**.
+![image](https://user-images.githubusercontent.com/24998910/130623886-371c5dd8-bca1-49fb-a7b0-f59f53a66b67.png)
+
+4. Select **Microsoft** as Identity Provider
+![image](https://user-images.githubusercontent.com/24998910/130624544-8a9b1cb0-52a7-45d4-8e1b-5a93345d86b6.png)
+
+5. Keep the default options and then click on **Add**
+![image](https://user-images.githubusercontent.com/24998910/130625891-ff9dd451-f1b2-4610-b4e2-fd77182d0c58.png)
+
+6. **Edit** newly created identity provider
+![image](https://user-images.githubusercontent.com/24998910/130628190-e510b94d-e27d-4fac-9ad1-25af821a0801.png)
+
+7. Click on **Permissions** and then click on **Click here to access API permissions**
+![image](https://user-images.githubusercontent.com/24998910/130628471-de1e900a-bd13-435a-b5e6-f64b2bf944b9.png)
+
+8. Click on **Grand admin consent for {{TENANT NAME}}** and then grant consent
+![image](https://user-images.githubusercontent.com/24998910/130628925-b849d104-d740-4e43-9aa2-de690b854ccb.png)
+
+9. The status would turn to **Granted**
+![image](https://user-images.githubusercontent.com/24998910/130629162-81ac2589-797d-48e8-aebd-b4a993889472.png)
 
 ### Configure with advanced settings
 As an alternative to the Management mode "Express" you can also use "Advanced":
