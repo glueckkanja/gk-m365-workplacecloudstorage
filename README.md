@@ -1,4 +1,13 @@
 # M365 Workplace Cloud Storage Spec
+
+**!!! NOTE: This project is no longer actively maintained and replaced by a [native integration into RealmJoin](https://docs.realmjoin.com/workplace-cloud-storage).**
+
+Please use [this guideline](https://docs.realmjoin.com/workplace-cloud-storage#migration-from-azure-web-app) for migration.
+
+The feature of managing Enterprise Mode Site Lists is covered by Microsoft 365 admin center. So, existing or new site lists need to be added as described here: [Publish enterprise site list to the cloud](https://learn.microsoft.com/en-us/deployedge/edge-ie-mode-cloud-site-list-mgmt#publish-enterprise-site-list-to-the-cloud-1). The resulting site list ID is then published via an Intune policy to Microsoft Edge.
+
+---
+
 ## Abstract
 Microsoft cloud managed Modern Workplace devices get all relevant policies and configurations via Microsoft Intune. Some of these settings rely on files available by URL. This application is intended to manage these files with an easy to use web based interface where administrators can create, upload and edit files and separate the content based on groups. Currently supported are the following types:
 
